@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edmon & Krokel</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui;background:#b8d9a0;color:#173b29;text-align:center}
+header{background:#214d36;color:white;padding:22px}
+h1{margin:4px;font-size:30px}
+main{max-width:600px;margin:auto;padding:16px}
+.panel{background:#fff9df;border:3px solid #507748;border-radius:18px;padding:16px;margin:12px 0}
+button{border:0;border-radius:12px;padding:14px;font-size:17px;font-weight:bold;background:#f4bd48;color:#243b27;touch-action:manipulation}
+.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:300px;margin:14px auto}
+.controls button{background:#315e43;color:white;font-size:24px}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+#world{height:300px;position:relative;overflow:hidden;border-radius:16px;border:3px solid #507748;background:linear-gradient(#83c9ed 0 55%,#d7c576 56% 70%,#739747 71%)}
+#hero{position:absolute;left:45%;top:45%;font-size:42px;transition:left .15s,top .15s}
+.tree{position:absolute;left:8%;top:43%;font-size:48px}
+.rock{position:absolute;right:10%;top:70%;font-size:30px}
+#note{font-weight:bold;min-height:28px;margin:10px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header><h1>🐻 Edmon & Krokel 🔥</h1><div>Dein großes Abenteuer!</div></header>
+<main>
+<section id="home" class="panel">
+<h2>🌍 Willkommen!</h2>
+<p>Erkunde die Savanne, sammle Materialien und baue dein Lager.</p>
+<button onclick="start()">▶ PLAY</button>
+</section>
+<section id="game" class="hidden">
+<div class="panel">
+<div>❤️ Leben: <b id="life">100</b>　🪵 Holz: <b id="wood">0</b>　🪨 Stein: <b id="stone">0</b></div>
+</div>
+<div id="world">
+<div class="tree" id="tree">🌳</div>
+<div class="rock" id="rock">🪨</div>
+<div id="hero">🧸<br>🔥</div>
+</div>
+<div id="note">Willkommen in der Savanne!</div>
+<div class="controls">
+<div></div><button onclick="move(0,-6)">⬆️</button><div></div>
+<button onclick="move(-7,0)">⬅️</button>
+<button onclick="move(0,6)">⬇️</button>
+<button onclick="move(7,0)">➡️</button>
+</div>
+<div class="actions">
+<button onclick="gather()">🪵 Sammeln</button>
+<button onclick="jump()">🦘 Springen</button>
+<button onclick="attack()">⚔️ Angriff</button>
+<button onclick="dodge()">💨 Ausweichen</button>
+<button onclick="build()">🏕️ Lager bauen</button>
+<button onclick="special()">✨ Spezialkraft</button>
+</div>
+<p><button onclick="menu()">🏠 Hauptmenü</button></p>
+</section>
+</main>
+<script>
+let x=45,y=45,wood=0,stone=0,life=100;
+function start(){home.classList.add('hidden');game.classList.remove('hidden');say('Abenteuer gestartet!');}
+function menu(){game.classList.add('hidden');home.classList.remove('hidden');}
+function say(t){document.getElementById('note').textContent=t;}
+function move(dx,dy){x=Math.max(0,Math.min(85,x+dx));y=Math.max(20,Math.min(75,y+dy));hero.style.left=x+'%';hero.style.top=y+'%';say('Du erkundest die Savanne.');}
+function near(el){let r=el.getBoundingClientRect(),h=hero.getBoundingClientRect();return Math.abs((r.left+r.width/2)-(h.left+h.width/2))<85&&Math.abs((r.top+r.height/2)-(h.top+h.height/2))<85;}
+function gather(){if(near(tree)){wood++;document.getElementById('wood').textContent=wood;say('🌳 +1 Holz!');}else if(near(rock)){stone++;document.getElementById('stone').textContent=stone;say('🪨 +1 Stein!');}else say('Du bist zu weit weg! Geh näher an Baum oder Stein.');}
+function jump(){let old=y;y=Math.max(20,y-8);hero.style.top=y+'%';say('Hopp!');setTimeout(()=>{y=old;hero.style.top=y+'%';},250);}
+function attack(){say('⚔️ Edmon und Krokel greifen an!');}
+function dodge(){move(7,0);say('💨 Ausgewichen!');}
+function build(){if(wood>=3){wood-=3;document.getElementById('wood').textContent=wood;say('🏕️ Lager gebaut!');}else say('Sammle erst 3 Holz.');}
+function special(){say('✨ Krokels Spezialkraft leuchtet!');}
+</script>
+</body>
+</html>
